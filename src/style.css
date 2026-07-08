@@ -326,6 +326,7 @@ button {
   border-left: 4px solid var(--marquee);
 }
 .drawer-header h2 {
+  color: #fff;
   font-size: 26px;
   letter-spacing: 0.03em;
 }
