@@ -1,0 +1,480 @@
+/* =========================================================================
+   Metatwin · Quản lý phim
+   Design language: "film archive" — a dark projection-booth navy shell
+   wrapping a bright, paper-toned workspace. Amber marquee-light accents
+   mark primary actions, deep velvet marks destructive ones. The recurring
+   motif is the film-strip perforation, used as a structural divider.
+   ========================================================================= */
+
+:root {
+  /* --- color --- */
+  --navy: #12172b;
+  --navy-2: #1c2340;
+  --navy-line: rgba(255, 255, 255, 0.12);
+
+  --paper: #f2f0ea;
+  --surface: #ffffff;
+  --ink: #12172b;
+  --muted: #6b6f80;
+  --line: #e2e0d6;
+
+  --marquee: #d79a2c;
+  --marquee-dark: #b57f1f;
+  --marquee-bg: rgba(215, 154, 44, 0.14);
+  --marquee-ink: #4a350a;
+
+  --velvet: #9c2f3e;
+  --velvet-dark: #7f2432;
+  --velvet-bg: rgba(156, 47, 62, 0.1);
+
+  --success: #2f7d5b;
+  --success-bg: rgba(47, 125, 91, 0.12);
+
+  /* --- type --- */
+  --font-display: "Bebas Neue", "Oswald", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  /* --- shape / motion --- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(18, 23, 43, 0.07);
+  --shadow-md: 0 10px 26px -8px rgba(18, 23, 43, 0.2);
+  --shadow-lg: 0 28px 56px -16px rgba(18, 23, 43, 0.32);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-med: 260ms;
+  --content-width: 1180px;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--marquee-bg);
+  color: var(--ink);
+}
+
+/* thin, quiet scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 8px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--marquee-dark);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* =========================================================================
+   Signature element — film-strip perforation
+   A repeating row of punched holes, colored to match whatever surface
+   sits behind it. Used as a divider wherever two "reels" of the UI meet.
+   ========================================================================= */
+.filmstrip {
+  --hole: var(--paper);
+  height: 9px;
+  background-image: radial-gradient(circle at 9px 4.5px, var(--hole) 3px, transparent 3.4px);
+  background-size: 18px 9px;
+  background-repeat: repeat-x;
+}
+
+/* =========================================================================
+   Layout primitives
+   ========================================================================= */
+.container {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* =========================================================================
+   Buttons
+   ========================================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn svg {
+  flex: none;
+}
+
+.btn-primary {
+  background: var(--marquee);
+  color: var(--marquee-ink);
+}
+.btn-primary:hover {
+  background: var(--marquee-dark);
+}
+
+.btn-danger {
+  background: transparent;
+  border-color: var(--velvet);
+  color: var(--velvet);
+}
+.btn-danger:hover {
+  background: var(--velvet);
+  color: #fff;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+.btn-ghost:hover {
+  background: var(--surface);
+  border-color: var(--muted);
+}
+
+.btn-icon {
+  width: 42px;
+  padding: 0;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================================================
+   Chips & badges
+   ========================================================================= */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.badge-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--marquee-bg);
+  color: var(--marquee-ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+.badge-rating svg {
+  width: 12px;
+  height: 12px;
+  fill: var(--marquee);
+}
+
+/* =========================================================================
+   Cards
+   ========================================================================= */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* =========================================================================
+   Global top-of-viewport loading indicator (useLoading singleton)
+   ========================================================================= */
+.top-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2000;
+  overflow: hidden;
+  background: rgba(18, 23, 43, 0.08);
+}
+.top-loader::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, var(--marquee), transparent);
+  animation: loader-slide 1.1s var(--ease) infinite;
+}
+@keyframes loader-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .top-loader::after {
+    animation: none;
+    left: 0;
+    width: 100%;
+    opacity: 0.6;
+  }
+}
+
+/* =========================================================================
+   Drawer (offcanvas) used for the movie form
+   ========================================================================= */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 23, 43, 0.45);
+  z-index: 1000;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(460px, 100vw);
+  background: var(--surface);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+}
+
+.drawer-header {
+  background: var(--navy);
+  color: #fff;
+  padding: 22px 24px 18px;
+  border-left: 4px solid var(--marquee);
+}
+.drawer-header h2 {
+  font-size: 26px;
+  letter-spacing: 0.03em;
+}
+.drawer-header p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-body);
+}
+
+.drawer-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 22px 24px;
+}
+
+.drawer-footer {
+  border-top: 1px solid var(--line);
+  padding: 16px 24px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* drawer transition */
+.drawer-enter-active,
+.drawer-leave-active {
+  transition: transform var(--dur-med) var(--ease);
+}
+.drawer-enter-from,
+.drawer-leave-to {
+  transform: translateX(100%);
+}
+.backdrop-enter-active,
+.backdrop-leave-active {
+  transition: opacity var(--dur-med) var(--ease);
+}
+.backdrop-enter-from,
+.backdrop-leave-to {
+  opacity: 0;
+}
+
+/* =========================================================================
+   Form
+   ========================================================================= */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.form-field label {
+  font-size: 12.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.form-field input,
+.form-field textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--marquee-dark);
+  background: var(--surface);
+}
+.form-field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+.form-field.has-error input,
+.form-field.has-error textarea {
+  border-color: var(--velvet);
+}
+.field-error {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--velvet);
+}
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* =========================================================================
+   Toast overrides (vue3-toastify) — reskin to the brand palette
+   ========================================================================= */
+.Toastify__toast {
+  font-family: var(--font-body) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+.Toastify__toast--success {
+  border-left: 4px solid var(--success);
+}
+.Toastify__toast--error {
+  border-left: 4px solid var(--velvet);
+}
+.Toastify__progress-bar--success {
+  background: var(--success) !important;
+}
+.Toastify__progress-bar--error {
+  background: var(--velvet) !important;
+}
+
+/* =========================================================================
+   Skeleton loading utility (shared shimmer keyframes)
+   ========================================================================= */
+.skeleton-bar {
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--line) 25%, #ece9dd 37%, var(--line) 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-bar {
+    animation: none;
+    background: var(--line);
+  }
+}
+
+/* =========================================================================
+   Responsive
+   ========================================================================= */
+@media (max-width: 720px) {
+  .container {
+    padding: 0 16px;
+  }
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+  .drawer {
+    width: 100vw;
+  }
+}
