@@ -66,9 +66,3 @@ trong khi API khác vẫn đang chạy. Vì vậy project dùng counter:
 - Validate form bằng Vuelidate
 - Unit test service và form
 
-## Ghi chú sửa lỗi (để giải thích khi phỏng vấn)
-
-- `handleSort` trong `ManageMovies.vue` từng gán nhầm biến `sortOder` (thiếu chữ `r`) thay vì `sortOrder`, khiến việc đổi chiều sort không hoạt động — đã sửa.
-- Rule `between` cho `year` từng giới hạn `(1900, 2026)` thay vì `(1900, 2100)` như đề bài — đã sửa.
-- Test `FormMovie.spec.js` (case submit hợp lệ) bị race condition: `v$.$validate()` là async nên `trigger("submit.prevent")` chưa chắc đã đợi xong trước khi assert — đã thêm `await flushPromises()` sau khi trigger để đảm bảo test chạy ổn định.
-- `FormMovie.vue` gọi thêm `v$.value.$reset()` mỗi khi prop `movie` thay đổi, để khi mở lại form ở chế độ khác (thêm mới sau khi vừa sửa) không còn giữ trạng thái lỗi cũ.
